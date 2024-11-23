@@ -1,0 +1,129 @@
+@base_url = http://52.91.75.107:3000
+# @base_url = http://localhost:3000
+###
+@client_id = da98c5bb-439d-4713-98af-044311d4353f
+@product_id = aec80e4c-6b35-4a55-a206-7b3dcbd4f8e0
+@domicile_id = dbf1b5e9-0597-45eb-8aa9-5af6eb54a987
+@sales_id = c1c57212-6423-4115-881e-e6628f4f35f3
+
+
+### post clients ####
+POST {{base_url}}/users
+Content-Type: application/json
+
+{
+    "socialReason": "Empresa de Prueba",
+    "companyName": "Empresa de Prueba",
+    "email": "empresa@prueba"
+}
+
+### get clients ####
+GET  {{base_url}}/users
+
+### get client by id ####
+GET  {{base_url}}/clients/{{client_id}}
+
+### put client by id ####
+PUT  {{base_url}}/clients/{{client_id}}
+Content-Type: application/json
+
+{
+    "socialReason": "Empresa de Prueba2",
+    "companyName": "Empresa de Prueba2",
+    "email": "empresa@prueba2"
+}
+
+### delete client by id ####
+DELETE  {{base_url}}/clients/{{client_id}}
+
+
+
+
+### post products ####
+POST {{base_url}}/products
+Content-Type: application/json
+
+{
+    "name": "Producto de Prueba",
+    "measureUnit": "Unidad",
+    "basePrice": 1000
+}
+
+### get products ####
+GET  {{base_url}}/products
+
+### get product by id ####
+GET  {{base_url}}/products/{{product_id}}
+
+### put product by id ####
+PUT  {{base_url}}/products/{{product_id}}
+Content-Type: application/json
+
+{
+    "name": "Producto de Prueba2",
+    "measureUnit": "Unidad2",
+    "basePrice": 2000
+}
+
+### delete product by id ####
+DELETE  {{base_url}}/products/{{product_id}}
+
+
+
+
+### post domiciles ####
+POST {{base_url}}/domiciles
+Content-Type: application/json
+
+{
+    "address": "Calle 123",
+    "colony": "Colonia 123",
+    "municipality": "Municipio 123",
+    "state": "Estado 123",
+    "addressType": "BILLING"
+}
+
+### get domiciles ####
+GET  {{base_url}}/domiciles
+
+### get domicile by id ####
+GET  {{base_url}}/domiciles/{{domicile_id}}
+
+### put domicile by id ####
+PUT  {{base_url}}/domiciles/{{domicile_id}}
+Content-Type: application/json
+
+{
+    "address": "Calle 1234",
+    "colony": "Colonia 1234",
+    "municipality": "Municipio 1234",
+    "state": "Estado 1234",
+    "addressType": "SHIPPING"
+}
+
+### delete domicile by id ####
+DELETE  {{base_url}}/domiciles/{{domicile_id}}
+
+
+
+### post sales ####
+POST {{base_url}}/sales
+Content-Type: application/json
+
+{
+    "clientId": "{{client_id}}",
+    "billingAddressId": "{{domicile_id}}",
+    "shippingAddressId": "{{domicile_id}}",
+    "total": 1000,
+    "productId": "{{product_id}}",
+    "quantity": 1,
+    "amount": 1000
+}
+
+### get sales ####
+GET  {{base_url}}/sales/{{sales_id}}
+
+
+### get pdf ####
+GET  {{base_url}}/sales/{{sales_id}}/pdf
+
