@@ -82,7 +82,7 @@ class SalesController {
 			.then(() => {
 				axios
 					.post(`http://${process.env.NOTIFICATION_ENDPOINT}`, {
-						message: `Puede descargar la factura de la venta ${salesNoteId} en https://${ip}/sales/${salesNoteId}/pdf`,
+						message: `Puede descargar la factura de la venta ${salesNoteId} en http://${ip}/sales/${salesNoteId}/pdf`,
 					})
 					.then(() => {
 						res
