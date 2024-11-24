@@ -85,7 +85,7 @@ jobs:
             docker stop ventas || true
             docker container rm -f ventas || true
             docker run -d --name ventas -p 3001:3001 \
-              -e NOTIFICATION_PORT=${{ vars.NOTIFICATION_PORT }} \
+              -e NOTIFICATION_ENDPOINT=${{ secrets.EC2_HOST_DEV }}:${{ vars.NOTIFICATION_PORT }} \
               -e MYSQL_HOST=${{ secrets.MYSQL_HOST }} \
               -e MYSQL_USER=${{ secrets.MYSQL_USER }} \
               -e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
