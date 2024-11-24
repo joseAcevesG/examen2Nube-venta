@@ -52,11 +52,11 @@ jobs:
           aws ecr get-login-password --region ${{ secrets.AWS_DEFAULT_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_DEFAULT_REGION }}.amazonaws.com
 
       - name: Build Docker image
-        run: docker build -t my-app-image .
+        run: docker build -t ventas .
 
       - name: Tag and push Docker image
         run: |
-          docker tag my-app-image:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_DEFAULT_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:${{ github.run_id }}
+          docker tag ventas:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_DEFAULT_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:${{ github.run_id }}
           docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_DEFAULT_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:${{ github.run_id }}
 
   deploy:
@@ -82,9 +82,9 @@ jobs:
             export AWS_SESSION_TOKEN=${{ secrets.AWS_SESSION_TOKEN }}
             $(aws ecr get-login-password --region ${{ secrets.AWS_DEFAULT_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_DEFAULT_REGION }}.amazonaws.com)
             docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_DEFAULT_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:${{ github.run_id }}
-            docker stop demo-twelve || true
-            docker container rm -f demo-twelve || true
-            docker run -d --name demo-twelve -p 8080:8080 \
+            docker stop ventas || true
+            docker container rm -f ventas || true
+            docker run -d --name ventas -p 8080:8080 \
               -e NOTIFICATION_PORT=${{ vars.NOTIFICATION_PORT }} \
               -e MYSQL_HOST=${{ secrets.MYSQL_HOST }} \
               -e MYSQL_USER=${{ secrets.MYSQL_USER }} \
