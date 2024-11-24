@@ -84,7 +84,7 @@ jobs:
             docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_DEFAULT_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:${{ github.run_id }}
             docker stop ventas || true
             docker container rm -f ventas || true
-            docker run -d --name ventas -p 8080:8080 \
+            docker run -d --name ventas -p 3001:3001 \
               -e NOTIFICATION_PORT=${{ vars.NOTIFICATION_PORT }} \
               -e MYSQL_HOST=${{ secrets.MYSQL_HOST }} \
               -e MYSQL_USER=${{ secrets.MYSQL_USER }} \
