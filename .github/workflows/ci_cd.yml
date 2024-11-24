@@ -93,5 +93,8 @@ jobs:
               -e IP=${{ secrets.EC2_HOST_DEV }}:${{ vars.APP_PORT }} \
               -e AWS_REGION=${{ secrets.AWS_DEFAULT_REGION }} \
               -e S3_BUCKET_NAME=${{ vars.S3_BUCKET_NAME }} \
+              -e aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }} \
+              -e aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
+              -e aws_session_token=${{ secrets.AWS_SESSION_TOKEN }} \
               ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_DEFAULT_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:${{ github.run_id }}
           EOF
