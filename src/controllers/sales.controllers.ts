@@ -86,16 +86,24 @@ class SalesController {
 			})
 			.then(() => {
 				console.log("PDF subido correctamente");
-				return axios.post(
-					`http://localhost:${process.env.NOTIFICATION_PORT}/`,
-					{
+				axios
+					.post(`http://localhost:${process.env.NOTIFICATION_PORT}/`, {
 						message: `Puede descargar la factura de la venta ${salesNoteId} en https://${ip}/sales/${salesNoteId}/pdf`,
-					},
-				);
-			})
-			.then(() => {
-				console.log("Notificación enviada correctamente");
-				res.status(201).send(`Venta creada correctamente id: ${salesNoteId}`);
+					})
+					.then(() => {
+						console.log("Notificación enviada correctamente");
+						res
+							.status(201)
+							.send(`Venta creada correctamente id: ${salesNoteId}`);
+					})
+					.catch((error) => {
+						console.error("Error enviando la notificación: ", error);
+						res
+							.status(201)
+							.send(
+								`Venta creada correctamente id: ${salesNoteId}\nError enviando la notificación`,
+							);
+					});
 			})
 			.catch((error) => {
 				if (error.message === "Producto no encontrado") {
