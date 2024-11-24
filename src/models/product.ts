@@ -87,14 +87,12 @@ class Product {
 	}
 
 	get(id: string): Promise<ProductType> {
-		console.log("Obteniendo producto");
 		const sql =
 			"SELECT id, name, measure_unit AS measureUnit, base_price AS basePrice FROM products WHERE id = ?";
 
 		return pool
 			.query<RowDataPacket[]>(sql, [id])
 			.then(([rows]) => {
-				console.log("Producto obtenido");
 				if (rows.length === 0) {
 					return Promise.reject(new Error("Producto no encontrado"));
 				}
