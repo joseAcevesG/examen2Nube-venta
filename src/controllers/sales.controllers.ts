@@ -38,7 +38,6 @@ class SalesController {
 	}
 
 	create(req: Request, res: Response) {
-		console.log("Creando venta");
 		const salesNoteId = uuidv4();
 
 		const SalesNoteData: SalesNote = {
@@ -54,11 +53,9 @@ class SalesController {
 		salesNote
 			.create(SalesNoteData)
 			.then(() => {
-				console.log("Nota de venta creada correctamente");
 				return product.get(req.body.productId);
 			})
 			.then((product) => {
-				console.log("Producto encontrado");
 				if (!product) {
 					throw new Error("Producto no encontrado");
 				}
@@ -73,11 +70,9 @@ class SalesController {
 				return salesContent.create(SaleContentData);
 			})
 			.then(() => {
-				console.log("Contenido de la venta creado correctamente");
 				return generatePDF(SalesNoteData, SaleContentData);
 			})
 			.then((pdfBuffer) => {
-				console.log("PDF generado correctamente");
 				return uploadToS3(
 					pdfBuffer,
 					`sales-note-${salesNoteId}.pdf`,
@@ -85,17 +80,23 @@ class SalesController {
 				);
 			})
 			.then(() => {
-				console.log("PDF subido correctamente");
-				return axios.post(
-					`http://localhost:${process.env.NOTIFICATION_PORT}/`,
-					{
-						message: `Puede descargar la factura de la venta ${salesNoteId} en https://${ip}/sales/${salesNoteId}/pdf`,
-					},
-				);
-			})
-			.then(() => {
-				console.log("Notificación enviada correctamente");
-				res.status(201).send(`Venta creada correctamente id: ${salesNoteId}`);
+				axios
+					.post(`http://${process.env.NOTIFICATION_ENDPOINT}`, {
+						message: `Puede descargar la factura de la venta ${salesNoteId} en http://${ip}/sales/${salesNoteId}/pdf`,
+					})
+					.then(() => {
+						res
+							.status(201)
+							.send(`Venta creada correctamente id: ${salesNoteId}`);
+					})
+					.catch((error) => {
+						console.error("Error enviando la notificación: ", error);
+						res
+							.status(201)
+							.send(
+								`Venta creada correctamente id: ${salesNoteId}\nError enviando la notificación`,
+							);
+					});
 			})
 			.catch((error) => {
 				if (error.message === "Producto no encontrado") {
@@ -113,7 +114,6 @@ class SalesController {
 
 	getPDF(req: Request, res: Response) {
 		const { id } = req.params;
-		console.log(`sales-note-${id}.pdf`);
 		getFile(`sales-note-${id}.pdf`)
 			.then((result) => {
 				if (!result.success) {
@@ -125,7 +125,6 @@ class SalesController {
 				return incrementDownloadCount(`sales-note-${id}.pdf`, result.url);
 			})
 			.then((url: string) => {
-				console.log("Redireccionando a la URL del archivo");
 				res.redirect(url);
 			})
 			.catch((error) => {

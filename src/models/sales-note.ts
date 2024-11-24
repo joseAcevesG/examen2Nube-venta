@@ -5,7 +5,6 @@ import pool from "../utils/mySQL";
 
 class SaleNote {
 	create(saleNote: SalesNoteType): Promise<SalesNoteType> {
-		console.log("Creando nota de venta");
 		const sql =
 			"INSERT INTO sales_notes (id, client, billing_address, shipping_address, total) VALUES (?, ?, ?, ?, ?)";
 
@@ -18,7 +17,6 @@ class SaleNote {
 				saleNote.total,
 			])
 			.then(([result]) => {
-				console.log("Nota de venta creada");
 				return { ...saleNote };
 			})
 			.catch((error) => {
